@@ -9,18 +9,16 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "system_properties")
 public class SystemProperties {
 
-	@Id 
+	@Id
 	private String id;
 
 	private String lastUpdatedDate;
-	
+
 	/**
 	 * Instantiates a new System properties.
 	 */
 	public SystemProperties() {
-		/*
-         * Default Constructor
-         */
+		// Default Constructor
 	}
 
 	/**

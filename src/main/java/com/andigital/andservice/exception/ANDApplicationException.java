@@ -1,14 +1,14 @@
-package com.andigital.andservice;
+package com.andigital.andservice.exception;
 
 /**
- * The type And rest service exception.
+ * The And rest service exception.
+ * This will be used for application level exceptions.
  */
 public class ANDApplicationException extends Exception{
     private String errorMessage;
 
     /**
      * Gets error message.
-     *
      * @return the error message
      */
     public String getErrorMessage() {
@@ -17,7 +17,6 @@ public class ANDApplicationException extends Exception{
 
     /**
      * Instantiates a new And rest service exception.
-     *
      * @param errorMessage the error message
      */
     public ANDApplicationException(String errorMessage) {

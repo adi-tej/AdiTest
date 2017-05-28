@@ -1,4 +1,4 @@
-package com.andigital.andservice.web;
+package com.andigital.andservice.domain;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,9 +16,7 @@ public class RestResponse<T> {
      * Instantiates a new Rest response.
      */
     public RestResponse(){
-        /*
-         * Default Constructor
-         */
+        // Default Constructor
     }
 
     /**

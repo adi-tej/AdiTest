@@ -1,4 +1,4 @@
-package com.andigital.andservice.web;
+package com.andigital.andservice.domain;
 
 /**
  * This will be appended to Rest Response in case of error for ANDService API endpoints
@@ -12,9 +12,7 @@ public class ErrorResponse {
      * Instantiates a new Error response.
      */
     public ErrorResponse() {
-        /*
-         * Default Constructor
-         */
+         // Default Constructor
     }
 
     /**

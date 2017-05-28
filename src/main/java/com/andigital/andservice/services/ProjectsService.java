@@ -1,21 +1,21 @@
 package com.andigital.andservice.services;
 
-
-import com.andigital.andservice.domain.Project;
+import com.andigital.andservice.domain.ClientsList;
 
 import java.util.List;
 
 /**
- * Created by aditeja on 5/23/2017.
+ * Service Layer for projects.
  */
 public interface ProjectsService {
 
-    /**
-     * API to return list of Projects
-     *
-     * @return projects
-     * @throws Exception the exception
-     */
-    public List<Project> getProjects() throws Exception;
+	/**
+	 * Gets projects.
+	 *
+	 * @param userId the user id
+	 * @return the projects
+	 * @throws Exception the exception
+	 */
+	public List<ClientsList> getProjects(String userId) throws Exception;
 
 }

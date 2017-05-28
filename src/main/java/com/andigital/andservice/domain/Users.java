@@ -18,9 +18,7 @@ public class Users {
      * Instantiates a new Users.
      */
     public Users(){
-        /*
-         * Default Constructor
-         */
+        // Default Constructor
     }
 
     /**

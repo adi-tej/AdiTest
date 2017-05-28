@@ -1,17 +1,19 @@
 package com.andigital.andservice.repository;
 
-import com.andigital.andservice.domain.Project;
-import com.andigital.andservice.domain.ProjectsResponse;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import com.andigital.andservice.domain.ClientsList;
 
 import java.util.List;
-
 
 /**
  * The interface Projects repository.
  */
-public interface ProjectsRepository extends MongoRepository<Project, String> {
+public interface ProjectsRepository {
 
-
-	List<ProjectsResponse> getProjectsResponse();
+	/**
+	 * Gets projects.
+	 *
+	 * @param userId the user id
+	 * @return the projects
+	 */
+	List<ClientsList> getProjects(String userId);
 }

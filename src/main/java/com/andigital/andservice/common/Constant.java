@@ -5,14 +5,18 @@ package com.andigital.andservice.common;
  * All project constant will be defined in this class.
  */
 public class Constant {
-	
-	 /**
+
+    /**
      * The constant for SUCCESS.
      */
     public static final String SUCCESS = "success";
-   
+
     /**
      * The constant for ERROR.
      */
     public static final String ERROR = "error";
+
+    private Constant() {
+        // A private constructor to hide the public one
+    }
 }
