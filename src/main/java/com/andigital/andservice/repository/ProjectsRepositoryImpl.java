@@ -2,6 +2,7 @@ package com.andigital.andservice.repository;
 
 import com.andigital.andservice.domain.ClientsList;
 import com.mongodb.*;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -17,10 +18,11 @@ import java.util.List;
  */
 @Repository
 public class ProjectsRepositoryImpl implements ProjectsRepository {
+
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
+
 	@Autowired
 	private MongoTemplate mongoTemplate;
-
-	private org.slf4j.Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Override
 	public List<ClientsList> getProjects(String userId) {

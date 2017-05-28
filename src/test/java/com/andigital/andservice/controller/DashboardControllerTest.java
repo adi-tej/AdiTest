@@ -59,10 +59,6 @@ public class DashboardControllerTest extends BaseTestNG {
         Assert.assertNull(sys.getId());
         this.systemPropertiesRepository.save(sys);
         Assert.assertNotNull(sys.getId());
-       /* MockitoAnnotations.initMocks(this);
-        //this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
-        this.mockMvc = MockMvcBuilders.standaloneSetup(dashboardController).build();
-        //document = documentPrettyPrintReqResp("dashboard");*/
     }
 
     /**
@@ -79,12 +75,12 @@ public class DashboardControllerTest extends BaseTestNG {
 
     /**
      * Should return success.
-     *
      * @throws Exception the exception
      */
 /* Test for System properties API Rest Docs documentation */
     @Test
     public void shouldReturnSuccess() throws Exception {
+
         this.mockMvc.perform(get("/dashboard/systemproperties").accept(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk()).andExpect(jsonPath("status",equalTo("success")))
                 .andDo(document("dashboard",responseFields(
@@ -97,12 +93,10 @@ public class DashboardControllerTest extends BaseTestNG {
 
     /**
      * Should return error.
-     *
      * @throws Exception the exception
      */
     @Test
     public void shouldReturnError() throws Exception {
-
         this.systemPropertiesRepository.deleteAll();
         this.mockMvc.perform(get("/dashboard/systemproperties").accept(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk()).andExpect(jsonPath("status",equalTo("error")))

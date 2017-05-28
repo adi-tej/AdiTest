@@ -25,13 +25,11 @@ public class SystemPropertiesServiceImpl implements SystemPropertiesService {
 	 * Instantiates a new System properties service.
 	 */
 	public SystemPropertiesServiceImpl() {
-		/*
-		 * Default constructor.
-		 */
+		// Default constructor.
 	}
 
 	/* (non-Javadoc)
-	 * @see com.andigital.andservice.read.api.services.DashboardService#getSystemProperties()
+	 * @see com.andigital.andservice.services.DashboardService#getSystemProperties()
 	 */
 	@Override
 	public List<SystemProperties> getSystemProperties() throws Exception {

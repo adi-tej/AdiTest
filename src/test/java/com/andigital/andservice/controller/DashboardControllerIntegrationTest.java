@@ -36,7 +36,6 @@ public class DashboardControllerIntegrationTest extends BaseTestNG {
 
 	/**
 	 * Sets up.
-	 *
 	 * @throws Exception the exception
 	 */
 	@BeforeMethod
@@ -51,7 +50,6 @@ public class DashboardControllerIntegrationTest extends BaseTestNG {
 
 	/**
 	 * Sample Test for Dashboard test API
-	 *
 	 * @throws Exception the exception
 	 */
 	@Test
@@ -61,12 +59,22 @@ public class DashboardControllerIntegrationTest extends BaseTestNG {
 	}
 
 	/**
+	 * When a PUT call is made on System Properties API URI
+	 */
+	@Test
+	public void putTestNegative() {
+		given().port(port).contentType(MediaType.APPLICATION_JSON_VALUE).
+				when().put("/dashboard/systemproperties").
+				then().statusCode(405);
+	}
+
+	/**
 	 * When a POST call is made on System Properties API URI
 	 */
 	@Test
 	public void postTestNegative() {
 		given().port(port).contentType(MediaType.APPLICATION_JSON_VALUE).
-				when().post("/dashboard/systemproperties").
+				when().put("/dashboard/systemproperties").
 				then().statusCode(405);
 	}
 
@@ -89,7 +97,7 @@ public class DashboardControllerIntegrationTest extends BaseTestNG {
 
 		Response res = given().port(port).contentType(MediaType.APPLICATION_JSON_VALUE).
 				when().get("/dashboard/systemproperties").
-				then().contentType(ContentType.JSON).statusCode(200).body(containsString("lastUpdatedDate")).extract().response();
+				then().contentType(ContentType.JSON).statusCode(200).body(containsString("systemproperties")).extract().response();
 		assertNotNull(res);
 		assertEquals(res.getBody().jsonPath().getString("status"), Constant.SUCCESS);
         assertNotNull(res.getBody().jsonPath().getString("results.systemproperties.id"));
@@ -107,7 +115,7 @@ public class DashboardControllerIntegrationTest extends BaseTestNG {
 		this.systemPropertiesRepository.deleteAll();
 		Response res = given().port(port).contentType(MediaType.APPLICATION_JSON_VALUE).
 				when().get("/dashboard/systemproperties").
-				then().contentType(ContentType.JSON).statusCode(200).body(containsString("lastUpdatedDate")).extract().response();
+				then().contentType(ContentType.JSON).statusCode(200).body(containsString("error")).extract().response();
 		assertNotNull(res);
 		assertEquals(res.getBody().jsonPath().getString("status"),Constant.ERROR);
 		assertNotNull(res.getBody().jsonPath().getString("results.error.message"));
