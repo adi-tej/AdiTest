@@ -1,7 +1,8 @@
-package com.andigital.andservice.services;
+package com.andigital.andservice.services.impl;
 
-import com.andigital.andservice.domain.SystemProperties;
+import com.andigital.andservice.model.domain.SystemProperties;
 import com.andigital.andservice.repository.SystemPropertiesRepository;
+import com.andigital.andservice.services.SystemPropertiesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

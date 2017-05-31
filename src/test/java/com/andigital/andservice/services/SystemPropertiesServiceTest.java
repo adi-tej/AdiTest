@@ -1,17 +1,18 @@
 package com.andigital.andservice.services;
 
-import com.andigital.andservice.domain.SystemProperties;
+import com.andigital.andservice.model.domain.SystemProperties;
 import com.andigital.andservice.repository.SystemPropertiesRepository;
+import com.andigital.andservice.services.impl.SystemPropertiesServiceImpl;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
@@ -24,6 +25,8 @@ import static org.testng.Assert.assertNotNull;
  */
 public class SystemPropertiesServiceTest{
 
+    private static final String SYSTEM_PROPERTIES_ID = "12786328";
+    private static final Date updatedDate = new Date();
     @Autowired
     private MockMvc mockMvc;
 
@@ -33,7 +36,7 @@ public class SystemPropertiesServiceTest{
     @Mock
     private SystemPropertiesRepository systemPropertiesRepository;
 
-
+    private List<SystemProperties> systemPropertiesReponse;
     /**
      * Sets up.
      * @throws Exception the exception
@@ -41,6 +44,7 @@ public class SystemPropertiesServiceTest{
     @BeforeClass
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
+        systemPropertiesReponse = Arrays.asList(new SystemProperties(SYSTEM_PROPERTIES_ID,updatedDate));
     }
     /**
      * Mock test get system propertie.
@@ -49,20 +53,12 @@ public class SystemPropertiesServiceTest{
     @Test
     public void testSystemPropertiesServiceSuccess() throws Exception {
 
-        when(systemPropertiesRepository.findAll()).thenReturn(Arrays.asList(new SystemProperties("12786328","27-05-2017")));
+        when(systemPropertiesRepository.findAll()).thenReturn(systemPropertiesReponse);
         List<SystemProperties> systemProperties = systemPropertiesServiceimpl.getSystemProperties();
         assertNotNull(systemProperties);
         assertNotNull(systemProperties.get(0).getId());
         assertNotNull(systemProperties.get(0).getLastUpdatedDate());
-        assertEquals(systemProperties.get(0).getId(),"12786328");
-        assertEquals(systemProperties.get(0).getLastUpdatedDate(),"27-05-2017");
-    }
-
-    /**
-     * Tear down.
-     * @throws Exception the exception
-     */
-    @AfterMethod
-    public void tearDown() throws Exception {
+        assertEquals(systemProperties.get(0).getId(), SYSTEM_PROPERTIES_ID);
+        assertEquals(systemProperties.get(0).getLastUpdatedDate(),updatedDate);
     }
 }

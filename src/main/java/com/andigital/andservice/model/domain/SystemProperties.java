@@ -1,7 +1,12 @@
-package com.andigital.andservice.domain;
+package com.andigital.andservice.model.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+
+import java.util.Date;
 
 /**
  * The type System properties.
@@ -9,10 +14,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "system_properties")
 public class SystemProperties {
 
-	@Id
+	@Id 
 	private String id;
 
-	private String lastUpdatedDate;
+	@Field("last_updated_date")
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	@JsonFormat(shape= JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
+	private Date lastUpdatedDate;
 
 	/**
 	 * Instantiates a new System properties.
@@ -26,7 +34,7 @@ public class SystemProperties {
 	 * @param id              the id
 	 * @param lastUpdatedDate the last updated date
 	 */
-	public SystemProperties(String id, String lastUpdatedDate) {
+	public SystemProperties(String id, Date lastUpdatedDate) {
 		this.id = id;
 		this.lastUpdatedDate = lastUpdatedDate;
 	}
@@ -51,7 +59,7 @@ public class SystemProperties {
 	 * Gets last updated date.
 	 * @return the lastUpdatedDate
 	 */
-	public String getLastUpdatedDate() {
+	public Date getLastUpdatedDate() {
 		return lastUpdatedDate;
 	}
 
@@ -59,7 +67,7 @@ public class SystemProperties {
 	 * Sets last updated date.
 	 * @param lastUpdatedDate the lastUpdatedDate to set
 	 */
-	public void setLastUpdatedDate(String lastUpdatedDate) {
+	public void setLastUpdatedDate(Date lastUpdatedDate) {
 		this.lastUpdatedDate = lastUpdatedDate;
 	}
 

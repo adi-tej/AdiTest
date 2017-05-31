@@ -1,4 +1,4 @@
-package com.andigital.andservice.domain;
+package com.andigital.andservice.model;
 
 /**
  * This will be appended to Rest Response in case of error for ANDService API endpoints
@@ -6,7 +6,6 @@ package com.andigital.andservice.domain;
 public class ErrorResponse {
     private String message;
     private String code;
-    private StackTraceElement[] details;
 
     /**
      * Instantiates a new Error response.
@@ -21,10 +20,9 @@ public class ErrorResponse {
      * @param message   the message
      * @param code the error code
      */
-    public ErrorResponse(String message, String code, StackTraceElement[] details) {
+    public ErrorResponse(String message, String code) {
         this.code = code;
         this.message = message;
-        this.details = details;
     }
 
     /**
@@ -60,19 +58,4 @@ public class ErrorResponse {
         this.code = code;
     }
 
-    /**
-     * Sets new details.
-     * @param details New value of details.
-     */
-    public void setDetails(StackTraceElement[] details) {
-        this.details = details;
-    }
-
-    /**
-     * Gets details.
-     * @return Value of details.
-     */
-    public StackTraceElement[] getDetails() {
-        return details;
-    }
 }

@@ -4,7 +4,7 @@ package com.andigital.andservice.common;
  * @author premsingh
  * All project constant will be defined in this class.
  */
-public class Constant {
+public final  class Constant {
 
     /**
      * The constant for SUCCESS.
@@ -16,7 +16,10 @@ public class Constant {
      */
     public static final String ERROR = "error";
 
-    private Constant() {
-        // A private constructor to hide the public one
-    }
+    public static final String SDM = "Service_Delivery_Manager";
+
+    public static final String CLIENTS = "clients";
+    public static final String SYSTEM_PROPERTIES = "systemproperties";
+    public static final String  DATE_FORMAT_DD_MM_YYYY ="dd/MM/yyyy";
+
 }

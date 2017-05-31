@@ -1,6 +1,6 @@
 package com.andigital.andservice.repository;
 
-import com.andigital.andservice.domain.SystemProperties;
+import com.andigital.andservice.model.domain.SystemProperties;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**

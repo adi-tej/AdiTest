@@ -1,6 +1,6 @@
 package com.andigital.andservice.services;
 
-import com.andigital.andservice.domain.SystemProperties;
+import com.andigital.andservice.model.domain.SystemProperties;
 
 import java.util.List;
 

@@ -1,10 +1,10 @@
 package com.andigital.andservice.repository;
 
 import com.andigital.andservice.BaseTestNG;
-import com.andigital.andservice.domain.SystemProperties;
+import com.andigital.andservice.model.domain.SystemProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
-import org.testng.annotations.AfterTest;
+import org.testng.annotations.AfterGroups;
 import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Test;
 
@@ -21,17 +21,20 @@ public class SystemPropertiesRepositoryIntegrationTest extends BaseTestNG {
 	@Autowired
 	private SystemPropertiesRepository systemPropertiesRepository;
 	
-	private static String updatedDate = new Date().toString();
+	private static Date testDate = new Date("01/01/2017");
 
 	/**
 	 * Sets up.
 	 *
 	 * @throws Exception the exception
 	 */
+
+
+
 	@BeforeGroups("system-properties")
 	public void setUp() throws Exception {
 		SystemProperties sys = new SystemProperties();
-		sys.setLastUpdatedDate(updatedDate);
+		sys.setLastUpdatedDate(testDate);
 		// save System Properties, verify has ID value after save
 		Assert.assertNull(sys.getId());
 		this.systemPropertiesRepository.save(sys);
@@ -47,7 +50,7 @@ public class SystemPropertiesRepositoryIntegrationTest extends BaseTestNG {
 		List<SystemProperties> sysList = systemPropertiesRepository.findAll();
 		Assert.assertNotNull(sysList);
 		Assert.assertNotNull(sysList.get(0).getLastUpdatedDate());
-		Assert.assertEquals(sysList.get(0).getLastUpdatedDate(), updatedDate);
+		Assert.assertEquals(sysList.get(0).getLastUpdatedDate(), testDate);
 	}
 
 	/**
@@ -55,7 +58,7 @@ public class SystemPropertiesRepositoryIntegrationTest extends BaseTestNG {
 	 *
 	 * @throws Exception the exception
 	 */
-	@AfterTest
+	@AfterGroups("system-properties")
 	public void tearDown() throws Exception {
 		this.systemPropertiesRepository.deleteAll();
 	}

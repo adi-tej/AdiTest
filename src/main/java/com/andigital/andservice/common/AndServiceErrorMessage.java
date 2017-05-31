@@ -11,12 +11,14 @@ public enum AndServiceErrorMessage {
 
 	// Generic error
 	NO_DATA_FOUND("ANDS-001", "NO DATA FOUND"),
-	APPLICATION_ERROR("ANDS-002","Application error"),
+	APPLICATION_ERROR("ANDS-002","Internal Application error"),
 
 	// Dashboard error
 	MISSING_USER_ID("ANDS-100", "User Id is missing."),
-	SYS_PROPERTIES_NA("ANDS-101","No System Properties are available");
-
+	SYS_PROPERTIES_NA("ANDS-101","No System Properties are available"),
+	CLIENTS_PROJECTS_NA("ANDS-102","No Clients and Projects are available"),
+	PROJECT_NA("ANDS-103","No data available for selected project id"),
+	USER_ID_NA("ANDS-104","The userId is null.");
 	private final String code;
 
 	private final String reasonPhrase;

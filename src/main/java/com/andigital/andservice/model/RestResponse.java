@@ -1,4 +1,4 @@
-package com.andigital.andservice.domain;
+package com.andigital.andservice.model;
 
 import java.util.HashMap;
 import java.util.Map;
