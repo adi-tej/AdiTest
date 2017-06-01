@@ -11,17 +11,16 @@ import java.util.Arrays;
  * Created by rakeshchoudhary on 5/24/17.
  */
 public class DashboardResponse {
-   //@JsonUnwrapped
     private Project project;
-    
-    private String actualSpent;
-    
-    private String forecastSpent;
-    
-    private String forecastVariance;
 
+    private String actualSpent;
+
+    private String forecastSpent;
+
+    private String forecastVariance;
+    @JsonIgnoreProperties({"user_id","baseRate","extensionRequest","entryUnit","activityDate","clientId","role"})
     private User serviceDeliveryManager;
-    
+
     private Schedule[] schedule;
 
 
@@ -66,7 +65,6 @@ public class DashboardResponse {
      *
      * @return the service delivery lead id
      */
-    @JsonIgnoreProperties({"baseRate","extensionRequest","entryUnit","date","clientId","role"})
     public User getServiceDeliveryManager() {
         return serviceDeliveryManager;
     }

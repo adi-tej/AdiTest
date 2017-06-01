@@ -28,9 +28,6 @@ public class SystemPropertiesRepositoryIntegrationTest extends BaseTestNG {
 	 *
 	 * @throws Exception the exception
 	 */
-
-
-
 	@BeforeGroups("system-properties")
 	public void setUp() throws Exception {
 		SystemProperties sys = new SystemProperties();

@@ -4,12 +4,12 @@ import com.andigital.andservice.common.Constant;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by rakeshchoudhary on 5/24/17.
@@ -17,10 +17,8 @@ import java.util.Date;
 @Document(collection="project")
 public class Project {
 
-    @Id
-    private String projectId;
+    private String id;
 
-    @Field("title")
     private String title;
 
     @Field("client_id")
@@ -37,8 +35,8 @@ public class Project {
     private Date endDate;
     @Field("planned_budget")
     private String plannedBudget;
-
-    private User[] users;
+    @JsonIgnoreProperties({"user_id","baseRate","extensionRequest","entryUnit","clientId","activityDate"})
+    private List<User> users;
 
     public Project() {
         // Default Constructor
@@ -60,23 +58,25 @@ public class Project {
         this.startDate = startDate;
         this.endDate = endDate;
         this.plannedBudget = plannedBudget;
-        this.users = users;
+        if(users!=null) {
+            this.users = Arrays.asList(users);
+        }
     }
 
     /**
      * Gets the project id.
      * @return the project id
      */
-    public String getProjectId() {
-        return projectId;
+    public String getId() {
+        return id;
     }
 
     /**
      * Sets the project id.
-     * @param projectId the new project id
+     * @param id the new project id
      */
-    public void setProjectId(String projectId) {
-        this.projectId = projectId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     /**
@@ -163,26 +163,18 @@ public class Project {
      * Gets the users.
      * @return the users
      */
-    public User[] getUsers() {
+    public List<User> getUsers() {
         return users;
     }
 
-    /**
-     * Sets the users.
-     * @param users the new users
-     */
-    @JsonIgnoreProperties({"baseRate","extensionRequest","entryUnit","date","clientId"})
-    public void setUsers(User[] users) {
+    public void setUsers(List<User> users) {
         this.users = users;
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Project{");
-        sb.append("projectId='").append(projectId).append('\'');
+        sb.append("projectId='").append(id).append('\'');
         sb.append(", title='").append(title).append('\'');
         sb.append(", clientId='").append(clientId).append('\'');
         sb.append(", startDate=").append(startDate);

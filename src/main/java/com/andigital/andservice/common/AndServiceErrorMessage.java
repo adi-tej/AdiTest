@@ -15,6 +15,7 @@ public enum AndServiceErrorMessage {
 
 	// Dashboard error
 	MISSING_USER_ID("ANDS-100", "User Id is missing."),
+	MISSING_PROJECT_ID("ANDS-105", "Project Id is missing."),
 	SYS_PROPERTIES_NA("ANDS-101","No System Properties are available"),
 	CLIENTS_PROJECTS_NA("ANDS-102","No Clients and Projects are available"),
 	PROJECT_NA("ANDS-103","No data available for selected project id"),

@@ -19,7 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
-import static org.testng.Assert.*;
+import static org.testng.AssertJUnit.*;
 
 /**
  * Test class for client service

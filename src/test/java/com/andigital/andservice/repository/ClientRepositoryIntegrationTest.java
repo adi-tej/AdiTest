@@ -19,7 +19,8 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.testng.Assert.*;
+import static org.testng.AssertJUnit.*;
+
 
 /**
  * Test class for Client Repository
@@ -106,7 +107,7 @@ public class ClientRepositoryIntegrationTest extends BaseTestNG{
         assertNotNull(client.getName());
         assertNotNull(client.getBudgetYear());
         assertNotNull(client.getProjects());
-        assertNotNull(client.getProjects().get(0).getProjectId());
+        assertNotNull(client.getProjects().get(0).getId());
         assertNotNull(client.getProjects().get(0).getTitle());
         assertNotNull(client.getProjects().get(0).getStartDate());
         assertNotNull(client.getProjects().get(0).getEndDate());
@@ -130,7 +131,7 @@ public class ClientRepositoryIntegrationTest extends BaseTestNG{
         assertNotNull(client.getName());
         assertNotNull(client.getBudgetYear());
         assertNotNull(client.getProjects());
-        assertNotNull(client.getProjects().get(0).getProjectId());
+        assertNotNull(client.getProjects().get(0).getId());
         assertNotNull(client.getProjects().get(0).getTitle());
         assertNotNull(client.getProjects().get(0).getStartDate());
         assertNotNull(client.getProjects().get(0).getEndDate());
@@ -154,7 +155,7 @@ public class ClientRepositoryIntegrationTest extends BaseTestNG{
         assertNotNull(client.getName());
         assertNotNull(client.getBudgetYear());
         assertNotNull(client.getProjects());
-        assertNotNull(client.getProjects().get(0).getProjectId());
+        assertNotNull(client.getProjects().get(0).getId());
         assertNotNull(client.getProjects().get(0).getTitle());
         assertNotNull(client.getProjects().get(0).getStartDate());
         assertNotNull(client.getProjects().get(0).getEndDate());

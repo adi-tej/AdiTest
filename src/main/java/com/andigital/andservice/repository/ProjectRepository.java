@@ -15,5 +15,5 @@ public interface ProjectRepository  extends MongoRepository<Project, String> {
       * @param projectId the project id
       * @return the project
       */
-      Project findByProjectId(String projectId) throws Exception;
+      Project findById(String projectId) throws Exception;
 };

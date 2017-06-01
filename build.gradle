@@ -1,11 +1,11 @@
 buildscript {
-    repositories {
-        mavenCentral()
-        jcenter()
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:"+project."springboot.version")
-    }
+	repositories {
+		mavenCentral()
+		jcenter()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:"+project."springboot.version")
+	}
 }
 
 plugins {
@@ -29,27 +29,27 @@ sourceCompatibility = project."java.version"
 targetCompatibility = project."java.version"
 
 repositories {
-    mavenCentral()
-    maven { url 'https://repo.spring.io/libs-snapshot' }
+	mavenCentral()
+	maven { url 'https://repo.spring.io/libs-snapshot' }
 }
 ext['spring-restdocs.version'] = '1.2.1.RELEASE'
 
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter-actuator')
-    compile('org.springframework.boot:spring-boot-actuator-docs')
-    compile('org.springframework.boot:spring-boot-starter-data-mongodb')
-    compile('org.springframework.boot:spring-boot-starter-jersey')
-    compile('org.springframework.boot:spring-boot-starter-mail')
-    compile('org.springframework.boot:spring-boot-starter-web')
-    compile('org.mockito:mockito-core:'+project."mockito.version")
+	compile('org.springframework.boot:spring-boot-starter-actuator')
+	compile('org.springframework.boot:spring-boot-actuator-docs')
+	compile('org.springframework.boot:spring-boot-starter-data-mongodb')
+	compile('org.springframework.boot:spring-boot-starter-jersey')
+	compile('org.springframework.boot:spring-boot-starter-mail')
+	compile('org.springframework.boot:spring-boot-starter-web')
 
     asciidoctor "org.springframework.restdocs:spring-restdocs-asciidoctor:${project.ext['spring-restdocs.version']}"
 
     //Test Dependencies
-    testCompile('com.jayway.restassured:rest-assured:'+project.'restassured.version')
-    testCompile('org.springframework.boot:spring-boot-starter-test')
-    testCompile('org.springframework.restdocs:spring-restdocs-mockmvc')
+	testCompile('com.jayway.restassured:rest-assured:'+project.'restassured.version')
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+	testCompile('org.springframework.restdocs:spring-restdocs-mockmvc')
     testCompile('org.testng:testng:'+project.'testng.version')
+    testCompile('org.mockito:mockito-core:'+project."mockito.version")
 }
 
 ext {

@@ -9,7 +9,7 @@ import com.andigital.andservice.model.domain.User;
 public interface UserService {
 
     /**
-     * @userId is the unique id of a user. This method looks up the userDao and returns identified data.
+     * @userId is the unique id of a user. This method looks up the user repository and returns identified data.
      */
     User getUserByUserId(String userId) throws ANDApplicationException;
 

@@ -1,5 +1,6 @@
 package com.andigital.andservice.model.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -10,7 +11,9 @@ import java.util.Date;
  */
 @Document(collection = "user")
 public class User {
-    @Field("id")
+
+    private String id;
+    @Field("user_id")
     private String userId;
     @Field("client_id")
     private String clientId;
@@ -27,8 +30,10 @@ public class User {
     @Field("profile_description")
     private String profileDescription;
     @Field("start_date")
+    @JsonFormat(pattern="dd-MM-yyyy")
     private Date startDate;
     @Field("end_date")
+    @JsonFormat(pattern="dd-MM-yyyy")
     private Date endDate;
     @Field("extension_request")
     private Boolean extensionRequest;
@@ -37,6 +42,7 @@ public class User {
     @Field("entry_unit")
     private String entryUnit;
     @Field("activity_date")
+    @JsonFormat(pattern="dd-MM-yyyy")
     private Date activityDate;
 
     /**
@@ -53,6 +59,24 @@ public class User {
      */
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    /**
+     * Gets the user id.
+     *
+     * @return the user id
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Sets the user id.
+     *
+     * @param id the new user id
+     */
+    public void setId(String id) {
+        this.id = id;
     }
 
     /**

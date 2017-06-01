@@ -7,7 +7,9 @@ import com.andigital.andservice.model.domain.Client;
 import com.andigital.andservice.model.domain.Project;
 import com.andigital.andservice.model.domain.SystemProperties;
 import com.andigital.andservice.model.domain.User;
+import com.andigital.andservice.repository.ProjectRepository;
 import com.andigital.andservice.repository.SystemPropertiesRepository;
+import com.andigital.andservice.repository.UserRepository;
 import com.jayway.restassured.http.ContentType;
 import com.jayway.restassured.response.Response;
 import com.mongodb.BasicDBObject;
@@ -22,8 +24,10 @@ import org.testng.annotations.AfterGroups;
 import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Test;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -65,7 +69,99 @@ public class DashboardControllerIntegrationTest extends BaseTestNG {
 	@Autowired
 	private SystemPropertiesRepository systemPropertiesRepository;
 
-	/**
+	@Autowired
+	private ProjectRepository projectRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+    private Project testProject;
+    private User testSDM;
+    private User testUser1;
+    private User testUser2;
+    private List<User> testUsers;
+
+
+    private void setupProjectAndTestUsers(){
+        testProject = new Project();
+        testSDM = new User();
+        testUsers= new ArrayList<>();
+        testUser1 = new User();
+        testUser1.setUserId("1");
+        testUser1.setId("1");
+        testUser1.setRole("Analyst");
+        testUser1.setEmail("Jon@email.com");
+        testUser1.setFirstName("John");
+        testUser1.setLastName("Snow");
+        String userStartDateStr = "01-01-2017";
+        String userEndDateStr = "01-01-2018";
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        Date userStartDate1 = null;
+        Date userEndDate1 = null;
+        try {
+            userStartDate1 = dateFormat.parse(userStartDateStr);
+            userEndDate1 = dateFormat.parse(userEndDateStr);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        testUser1.setStartDate(userStartDate1);
+        testUser1.setEndDate(userEndDate1);
+        testUser1.setMobile("012891945691");
+        testUser1.setProfileDescription("Jon's work life description...");
+        testUser2 = new User();
+        testUser2.setUserId("3");
+        testUser2.setId("3");
+        testUser2.setRole("Senior_Analyst");
+        testUser2.setEmail("Arya@email.com");
+        testUser2.setFirstName("Arya");
+        testUser2.setLastName("Stark");
+        userStartDateStr = "01-01-2017";
+        userEndDateStr = "01-01-2018";
+        Date userStartDate2 = null;
+        Date userEndDate2 = null;
+        try {
+            userStartDate2 = dateFormat.parse(userStartDateStr);
+            userEndDate2 = dateFormat.parse(userEndDateStr);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        testUser2.setStartDate(userStartDate2);
+        testUser2.setEndDate(userEndDate2);
+        testUser2.setMobile("812891945691");
+        testUser2.setProfileDescription("Arya's work life description...");
+        testSDM.setUserId("2");
+        testSDM.setId("2");
+        testSDM.setEmail("test@email.com");
+        testSDM.setRole(Constant.SDM);
+        testUsers.add(testUser1);
+        testUsers.add(testUser2);
+        testUsers.add(testSDM);
+        testProject.setId("323245");
+        testProject.setTitle("COSTA");
+        testProject.setPlannedBudget("100K");
+        testProject.setClientId("0123456");
+        String startDateStr = "01-01-2017";
+        String endDateStr = "01-01-2018";
+        Date startDate = null;
+        Date endDate = null;
+        try {
+            startDate = dateFormat.parse(startDateStr);
+            endDate = dateFormat.parse(endDateStr);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        testProject.setStartDate(startDate);
+        testProject.setEndDate(endDate);
+        testProject.setUsers(testUsers);
+        userRepository.save(testUser1);
+        userRepository.save(testUser2);
+        userRepository.save(testSDM);
+        projectRepository.save(testProject);
+    }
+
+    /**
 	 * Sets up.
 	 * @throws Exception the exception
 	 */
@@ -115,6 +211,8 @@ public class DashboardControllerIntegrationTest extends BaseTestNG {
 		mongoTemplate.getConverter().write(client2,clientObject2);
 		List<DBObject> dbClientsObject = Arrays.asList(clientObject1,clientObject2);
 		clientCollection.insert(dbClientsObject);
+		//sets up test users and project
+		setupProjectAndTestUsers();
 	}
 	/**
 	 * Sample Test for Dashboard test API
@@ -128,6 +226,33 @@ public class DashboardControllerIntegrationTest extends BaseTestNG {
 		given().port(port).contentType(MediaType.TEXT_PLAIN_VALUE).when().get("/dashboard/test").then()
 				.statusCode(200);
 	}
+
+    /**
+     * Test get project by id happy path.
+     */
+    @Test
+    public void testGetProjectByIdSuccessResponse() {
+        Response res = given().port(port).contentType(MediaType.TEXT_PLAIN_VALUE).when().get("/dashboard/project/"+testProject.getId()).then()
+                .statusCode(200).extract().response();
+        assertNotNull(res);
+        assertEquals(res.getBody().jsonPath().getString("status"), Constant.SUCCESS);
+        assertNotNull(res.getBody().jsonPath().getString("dashboard.project"));
+        assertNotNull(res.getBody().jsonPath().getString("dashboard.project.id"));
+		assertNotNull(res.getBody().jsonPath().getString("dashboard.serviceDeliveryManager"));
+	}
+    /**
+     * Test get project by id sad path.
+     */
+    @Test
+    public void testGetProjectByIdErrorResponse() {
+        Response res = given().port(port).contentType(MediaType.TEXT_PLAIN_VALUE).when().get("/dashboard/project/-11").then()
+                .statusCode(200).extract().response();
+        assertNotNull(res);
+        assertEquals(res.getBody().jsonPath().getString("status"), Constant.ERROR);
+        assertNotNull(res.getBody().jsonPath().getString("error.message"));
+        assertNotNull(res.getBody().jsonPath().getString("error.message"));
+        assertNotNull(res.getBody().jsonPath().getString("error.code"));
+    }
 
 	/*
 	 * INTEGRATION TESTS FOR SYSTEM_PROPERTIES API ENDPOINT
@@ -173,10 +298,10 @@ public class DashboardControllerIntegrationTest extends BaseTestNG {
 				then().contentType(ContentType.JSON).statusCode(200).body(containsString(Constant.SYSTEM_PROPERTIES)).extract().response();
 		assertNotNull(res);
 		assertEquals(res.getBody().jsonPath().getString("status"), Constant.SUCCESS);
-        assertNotNull(res.getBody().jsonPath().getString("results.systemproperties.id"));
-        assertNotNull(res.getBody().jsonPath().getString("results.systemproperties.lastUpdatedDate"));
-		assertEquals(res.getBody().jsonPath().getString("results.systemproperties.lastUpdatedDate"),new SimpleDateFormat(Constant.DATE_FORMAT_DD_MM_YYYY).format(updatedDate));
-		assertTrue(res.getBody().jsonPath().getString("results.systemproperties.lastUpdatedDate").length() > 0);
+        assertNotNull(res.getBody().jsonPath().getString("systemproperties.id"));
+        assertNotNull(res.getBody().jsonPath().getString("systemproperties.lastUpdatedDate"));
+		assertEquals(res.getBody().jsonPath().getString("systemproperties.lastUpdatedDate"),new SimpleDateFormat(Constant.DATE_FORMAT_DD_MM_YYYY).format(updatedDate));
+		assertTrue(res.getBody().jsonPath().getString("systemproperties.lastUpdatedDate").length() > 0);
 	}
 
 	/**
@@ -190,8 +315,8 @@ public class DashboardControllerIntegrationTest extends BaseTestNG {
 				then().contentType(ContentType.JSON).statusCode(200).body(containsString(Constant.ERROR)).extract().response();
 		assertNotNull(res);
 		assertEquals(res.getBody().jsonPath().getString("status"),Constant.ERROR);
-		assertNotNull(res.getBody().jsonPath().getString("results.error.message"));
-		assertNotNull(res.getBody().jsonPath().getString("results.error.code"));
+		assertNotNull(res.getBody().jsonPath().getString("error.message"));
+		assertNotNull(res.getBody().jsonPath().getString("error.code"));
 	}
 
 	/*
@@ -240,17 +365,17 @@ public class DashboardControllerIntegrationTest extends BaseTestNG {
 				then().contentType(ContentType.JSON).statusCode(200).body(containsString(Constant.CLIENTS)).extract().response();
 		assertNotNull(res);
 		Assert.assertEquals(res.getBody().jsonPath().getString("status"), Constant.SUCCESS);
-		Assert.assertTrue(res.getBody().jsonPath().getList("results.clients").size()>1);
-		assertNotNull(res.getBody().jsonPath().getList("results.clients.clientId").get(0));
-		assertNotNull(res.getBody().jsonPath().getList("results.clients.name").get(0));
-		assertNotNull(res.getBody().jsonPath().getList("results.clients.budgetYear").get(0));
-		assertNotNull(res.getBody().jsonPath().getList("results.clients.projects.id").get(0));
-		assertNotNull(res.getBody().jsonPath().getList("results.clients.projects.title").get(0));
-		Assert.assertEquals(res.getBody().jsonPath().getList("results.clients.clientId").get(0),CLIENT_ID_1);
-		Assert.assertEquals(res.getBody().jsonPath().getList("results.clients.clientId").get(1),CLIENT_ID_2);
-		Assert.assertEquals(res.getBody().jsonPath().getList("results.clients.name").get(0),CLIENT_1);
-		Assert.assertEquals(res.getBody().jsonPath().getList("results.clients.budgetYear").get(0),BUDGET_YEAR_JAN_DEC);
-		Assert.assertEquals(res.getBody().jsonPath().getList("results.clients.projects.title").get(0), Arrays.asList(PROJECT_1));
+		Assert.assertTrue(res.getBody().jsonPath().getList("clients").size()>1);
+		assertNotNull(res.getBody().jsonPath().getList("clientId").get(0));
+		assertNotNull(res.getBody().jsonPath().getList("clients.name").get(0));
+		assertNotNull(res.getBody().jsonPath().getList("clients.budgetYear").get(0));
+		assertNotNull(res.getBody().jsonPath().getList("clients.projects.id").get(0));
+		assertNotNull(res.getBody().jsonPath().getList("clients.projects.title").get(0));
+		Assert.assertEquals(res.getBody().jsonPath().getList("clients.clientId").get(0),CLIENT_ID_1);
+		Assert.assertEquals(res.getBody().jsonPath().getList("clients.clientId").get(1),CLIENT_ID_2);
+		Assert.assertEquals(res.getBody().jsonPath().getList("clients.name").get(0),CLIENT_1);
+		Assert.assertEquals(res.getBody().jsonPath().getList("clients.budgetYear").get(0),BUDGET_YEAR_JAN_DEC);
+		Assert.assertEquals(res.getBody().jsonPath().getList("clients.projects.title").get(0), Arrays.asList(PROJECT_1));
 	}
 	/**
 	 * Client Projects API response success test.
@@ -264,17 +389,17 @@ public class DashboardControllerIntegrationTest extends BaseTestNG {
 				then().contentType(ContentType.JSON).statusCode(200).body(containsString(Constant.CLIENTS)).extract().response();
 		assertNotNull(res);
 		Assert.assertEquals(res.getBody().jsonPath().getString("status"), Constant.SUCCESS);
-		Assert.assertTrue(res.getBody().jsonPath().getList("results.clients").size()==1);
-		assertNotNull(res.getBody().jsonPath().getList("results.clients.clientId"));
-		assertNotNull(res.getBody().jsonPath().getList("results.clients.name"));
-		assertNotNull(res.getBody().jsonPath().getList("results.clients.budgetYear"));
-		assertNotNull(res.getBody().jsonPath().getList("results.clients.projects"));
-		assertNotNull(res.getBody().jsonPath().getList("results.clients.projects.id"));
-		assertNotNull(res.getBody().jsonPath().getList("results.clients.projects.title"));
-		Assert.assertEquals(res.getBody().jsonPath().getList("results.clients.clientId").get(0),CLIENT_ID_2);
-		Assert.assertEquals(res.getBody().jsonPath().getList("results.clients.name").get(0),CLIENT_2);
-		Assert.assertEquals(res.getBody().jsonPath().getList("results.clients.budgetYear").get(0),BUDGET_YEAR_APR_MAR);
-		Assert.assertEquals(res.getBody().jsonPath().getList("results.clients.projects.title").get(0), Arrays.asList(PROJECT_2));
+		Assert.assertTrue(res.getBody().jsonPath().getList("clients").size()==1);
+		assertNotNull(res.getBody().jsonPath().getList("clients.clientId"));
+		assertNotNull(res.getBody().jsonPath().getList("clients.name"));
+		assertNotNull(res.getBody().jsonPath().getList("clients.budgetYear"));
+		assertNotNull(res.getBody().jsonPath().getList("clients.projects"));
+		assertNotNull(res.getBody().jsonPath().getList("clients.projects.id"));
+		assertNotNull(res.getBody().jsonPath().getList("clients.projects.title"));
+		Assert.assertEquals(res.getBody().jsonPath().getList("clients.clientId").get(0),CLIENT_ID_2);
+		Assert.assertEquals(res.getBody().jsonPath().getList("clients.name").get(0),CLIENT_2);
+		Assert.assertEquals(res.getBody().jsonPath().getList("clients.budgetYear").get(0),BUDGET_YEAR_APR_MAR);
+		Assert.assertEquals(res.getBody().jsonPath().getList("clients.projects.title").get(0), Arrays.asList(PROJECT_2));
 	}
 
 	/**
@@ -289,17 +414,17 @@ public class DashboardControllerIntegrationTest extends BaseTestNG {
 				then().contentType(ContentType.JSON).statusCode(200).body(containsString(Constant.CLIENTS)).extract().response();
 		assertNotNull(res);
 		Assert.assertEquals(res.getBody().jsonPath().getString("status"), Constant.SUCCESS);
-		Assert.assertTrue(res.getBody().jsonPath().getList("results.clients").size()==1);
-		assertNotNull(res.getBody().jsonPath().getList("results.clients.clientId"));
-		assertNotNull(res.getBody().jsonPath().getList("results.clients.name"));
-		assertNotNull(res.getBody().jsonPath().getList("results.clients.budgetYear"));
-		assertNotNull(res.getBody().jsonPath().getList("results.clients.projects"));
-		assertNotNull(res.getBody().jsonPath().getList("results.clients.projects.id"));
-		assertNotNull(res.getBody().jsonPath().getList("results.clients.projects.title"));
-		Assert.assertEquals(res.getBody().jsonPath().getList("results.clients.clientId").get(0),CLIENT_ID_2);
-		Assert.assertEquals(res.getBody().jsonPath().getList("results.clients.name").get(0),CLIENT_2);
-		Assert.assertEquals(res.getBody().jsonPath().getList("results.clients.budgetYear").get(0),BUDGET_YEAR_APR_MAR);
-		Assert.assertEquals(res.getBody().jsonPath().getList("results.clients.projects.title").get(0), Arrays.asList(PROJECT_2));
+		Assert.assertTrue(res.getBody().jsonPath().getList("clients").size()==1);
+		assertNotNull(res.getBody().jsonPath().getList("clients.clientId"));
+		assertNotNull(res.getBody().jsonPath().getList("clients.name"));
+		assertNotNull(res.getBody().jsonPath().getList("clients.budgetYear"));
+		assertNotNull(res.getBody().jsonPath().getList("clients.projects"));
+		assertNotNull(res.getBody().jsonPath().getList("clients.projects.id"));
+		assertNotNull(res.getBody().jsonPath().getList("clients.projects.title"));
+		Assert.assertEquals(res.getBody().jsonPath().getList("clients.clientId").get(0),CLIENT_ID_2);
+		Assert.assertEquals(res.getBody().jsonPath().getList("clients.name").get(0),CLIENT_2);
+		Assert.assertEquals(res.getBody().jsonPath().getList("clients.budgetYear").get(0),BUDGET_YEAR_APR_MAR);
+		Assert.assertEquals(res.getBody().jsonPath().getList("clients.projects.title").get(0), Arrays.asList(PROJECT_2));
 	}
 
 	/**
@@ -313,8 +438,8 @@ public class DashboardControllerIntegrationTest extends BaseTestNG {
 				then().contentType(ContentType.JSON).statusCode(200).body(containsString(Constant.ERROR)).extract().response();
 		assertNotNull(res);
 		Assert.assertEquals(res.getBody().jsonPath().getString("status"),Constant.ERROR);
-		assertNotNull(res.getBody().jsonPath().getString("results.error.message"));
-		assertNotNull(res.getBody().jsonPath().getString("results.error.code"));
+		assertNotNull(res.getBody().jsonPath().getString("error.message"));
+		assertNotNull(res.getBody().jsonPath().getString("error.code"));
 	}
 
 	/**

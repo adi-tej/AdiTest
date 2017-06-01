@@ -16,10 +16,18 @@ public final  class Constant {
      */
     public static final String ERROR = "error";
 
+    /**
+     * The constant SDM.
+     */
     public static final String SDM = "Service_Delivery_Manager";
 
     public static final String CLIENTS = "clients";
     public static final String SYSTEM_PROPERTIES = "systemproperties";
     public static final String  DATE_FORMAT_DD_MM_YYYY ="dd/MM/yyyy";
+
+    /**
+     * The constant STATUS.
+     */
+    public static final String STATUS = "status";
 
 }

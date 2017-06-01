@@ -19,7 +19,7 @@ public class SystemProperties {
 
 	@Field("last_updated_date")
 	@JsonInclude(JsonInclude.Include.NON_NULL)
-	@JsonFormat(shape= JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
+	@JsonFormat(shape= JsonFormat.Shape.STRING, pattern="dd MMM yyyy HH:mm:ss")
 	private Date lastUpdatedDate;
 
 	/**

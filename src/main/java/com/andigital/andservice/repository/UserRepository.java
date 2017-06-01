@@ -11,9 +11,9 @@ public interface UserRepository extends MongoRepository<User, String> {
     /**
      * Find by user id.
      *
-     * @param userId the user id
+     * @param id the user id
      * @return the user
      */
-    User findByUserId(String userId) throws Exception;
+    User findById(String id) throws Exception;
 };
 

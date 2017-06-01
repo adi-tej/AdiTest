@@ -41,7 +41,7 @@ public class DashboardController {
 	@Autowired
 	private ClientService clientService;
 
-	private RestResponse restResponse = null;
+	private RestResponse restResponse;
 	/**
 	 * Test string.
 	 *
@@ -59,19 +59,22 @@ public class DashboardController {
 	 * @return the response entity
 	 */
 	@RequestMapping(value = "/systemproperties", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public RestResponse<Object> getSystemProperties(){
-		logger.debug("In getSystemProperties method {}",new Date());
+	public RestResponse getSystemProperties() {
+		restResponse=new RestResponse();
 		try {
 			List<SystemProperties> systemPropertiesList = systemPropertiesService.getSystemProperties();
-			if(systemPropertiesList !=null && !systemPropertiesList.isEmpty()) {
-				restResponse = new RestResponse<>(Constant.SUCCESS, Constant.SYSTEM_PROPERTIES,systemPropertiesList.get(0));
-			}else{
+			if (systemPropertiesList != null && !systemPropertiesList.isEmpty()) {
+				restResponse.add(Constant.STATUS, Constant.SUCCESS);
+				restResponse.add("systemproperties", systemPropertiesList.get(0));
+			} else {
 				logger.error("Error in getSystemProperties method : No data found. ");
-				restResponse = new RestResponse<>(Constant.ERROR, new ErrorResponse(AndServiceErrorMessage.SYS_PROPERTIES_NA.getReasonPhrase(), AndServiceErrorMessage.SYS_PROPERTIES_NA.code()));
+				restResponse.add(Constant.STATUS, Constant.ERROR);
+				restResponse.add(Constant.ERROR, new ErrorResponse(AndServiceErrorMessage.SYS_PROPERTIES_NA.getReasonPhrase(), AndServiceErrorMessage.SYS_PROPERTIES_NA.code()));
 			}
 		} catch (Exception e) {
-			logger.error("Error in getSystemProperties method {}", e);
-			restResponse = new RestResponse<>(Constant.ERROR, new ErrorResponse(AndServiceErrorMessage.APPLICATION_ERROR.getReasonPhrase(), AndServiceErrorMessage.APPLICATION_ERROR.code()));
+				logger.error("Error in getSystemProperties method {}", e);
+				restResponse.add(Constant.STATUS, Constant.ERROR);
+				restResponse.add(Constant.ERROR, new ErrorResponse(AndServiceErrorMessage.APPLICATION_ERROR.getReasonPhrase(), AndServiceErrorMessage.APPLICATION_ERROR.code()));
 		}
 		return restResponse;
 	}
@@ -79,28 +82,32 @@ public class DashboardController {
 	/**
 	 * Rest API Endpoint to get List of Projects of Clients for a given userId.
 	 *
-	 * @param userid the user id
+	 * @param userId the user id
 	 * @return the rest response
 	 */
 	@RequestMapping(value = "/user/{userid}/projects", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public RestResponse getProjectsList(@PathVariable String userid){
-		logger.debug("In getProjectsList method user Id :{}",userid);
+	public RestResponse getProjectsList(@PathVariable("userid") String userId){
+		restResponse = new RestResponse();
+		logger.debug("In getProjectsList method user Id :{}",userId);
 		try {
-			if(userid!=null) {
-				List<Client> projectsList = clientService.getClientProjectsByUserId(userid);
+			if(userId!=null) {
+				List<Client> projectsList = clientService.getClientProjectsByUserId(userId);
 				if (projectsList != null && !projectsList.isEmpty()) {
-					restResponse = new RestResponse<>(Constant.SUCCESS, Constant.CLIENTS, projectsList);
+					restResponse.add(Constant.STATUS, Constant.SUCCESS);
+					restResponse.add("clients", projectsList);
 				} else {
 					logger.error("Error in getProjectsList method : No data found. ");
-					restResponse = new RestResponse<>(Constant.ERROR, new ErrorResponse(AndServiceErrorMessage.CLIENTS_PROJECTS_NA.getReasonPhrase(), AndServiceErrorMessage.CLIENTS_PROJECTS_NA.code()));
+					restResponse.add(Constant.STATUS, Constant.ERROR);
+					restResponse.add(Constant.ERROR, new ErrorResponse(AndServiceErrorMessage.SYS_PROPERTIES_NA.getReasonPhrase(), AndServiceErrorMessage.SYS_PROPERTIES_NA.code()));
 				}
 			}else{
 				logger.error("Error in getProjectsList method : UserId is null. ");
-				restResponse = new RestResponse<>(Constant.ERROR, new ErrorResponse(AndServiceErrorMessage.USER_ID_NA.getReasonPhrase(), AndServiceErrorMessage.USER_ID_NA.code()));
+				restResponse.add(Constant.STATUS, Constant.ERROR);
+				restResponse.add(Constant.ERROR, new ErrorResponse(AndServiceErrorMessage.USER_ID_NA.getReasonPhrase(), AndServiceErrorMessage.USER_ID_NA.code()));
 			}
 		} catch (Exception e) {
 			logger.error("Error in getProjectsList method {}", e);
-			restResponse = new RestResponse<>(Constant.ERROR, new ErrorResponse(AndServiceErrorMessage.APPLICATION_ERROR.getReasonPhrase(), AndServiceErrorMessage.APPLICATION_ERROR.code()));
+			restResponse.add(Constant.ERROR, new ErrorResponse(AndServiceErrorMessage.APPLICATION_ERROR.getReasonPhrase(), AndServiceErrorMessage.APPLICATION_ERROR.code()));
 		}
 		return restResponse;
 	}
@@ -112,19 +119,30 @@ public class DashboardController {
      * @return the project by id
      */
     @RequestMapping(path = "/project/{projectid}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE } )
-    public RestResponse<Object> getProjectById(@PathVariable String projectId) {
+    public RestResponse getProjectById(@PathVariable("projectid") String projectId) {
+		restResponse = new RestResponse();
         logger.debug("In getProjectById method,getting details of project {}",projectId);
-        try {
-            DashboardResponse dashboardResponse = projectService.getProjectById(projectId);
-            if (dashboardResponse != null) {
-                restResponse = new RestResponse<>(Constant.SUCCESS,"dashboard", dashboardResponse);
-            }else {
-                logger.error("Error in getProjectById method : No data found. ");
-				restResponse = new RestResponse<>(Constant.ERROR, new ErrorResponse(AndServiceErrorMessage.PROJECT_NA.getReasonPhrase(), AndServiceErrorMessage.PROJECT_NA.code()));
+        if(projectId!=null) {
+            try {
+                DashboardResponse dashboardResponse = projectService.getProjectById(projectId);
+                if (dashboardResponse != null) {
+                    restResponse.add(Constant.STATUS, Constant.SUCCESS);
+                    restResponse.add("dashboard", dashboardResponse);
+
+                } else {
+                    logger.error("Error in getProjectById method : No data found. ");
+                    restResponse.add(Constant.STATUS, Constant.ERROR);
+                    restResponse.add(Constant.ERROR, new ErrorResponse(AndServiceErrorMessage.PROJECT_NA.getReasonPhrase(), AndServiceErrorMessage.PROJECT_NA.code()));
+                }
+            } catch (Exception e) {
+                logger.error("Error in getProjectById method {}", e);
+                restResponse.add(Constant.STATUS, Constant.ERROR);
+                restResponse.add(Constant.ERROR, new ErrorResponse(AndServiceErrorMessage.APPLICATION_ERROR.getReasonPhrase(), AndServiceErrorMessage.APPLICATION_ERROR.code()));
             }
-        }catch (Exception e) {
-            logger.error("Error in getProjectById method {}", e);
-			restResponse = new RestResponse<>(Constant.ERROR, new ErrorResponse(AndServiceErrorMessage.APPLICATION_ERROR.getReasonPhrase(), AndServiceErrorMessage.APPLICATION_ERROR.code()));
+        }else{
+            logger.error("Error in getProjectById method : projectId must not be null");
+            restResponse.add(Constant.STATUS, Constant.ERROR);
+            restResponse.add(Constant.ERROR, new ErrorResponse(AndServiceErrorMessage.MISSING_PROJECT_ID.getReasonPhrase(), AndServiceErrorMessage.MISSING_PROJECT_ID.code()));
         }
         return restResponse;
     }
